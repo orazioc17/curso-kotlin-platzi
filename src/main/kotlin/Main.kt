@@ -80,6 +80,16 @@ fun main(args: Array<String>) {
 
     usoHighOrderFunctions()
 
+    usoDeLet()
+
+    usoDeWith()
+
+    usoDeRun()
+
+    usoDeApply()
+
+    usoDeAlso()
+
 }
 
 
@@ -503,4 +513,104 @@ fun functionInception(nombre: String) : () -> String {
     return {
         "Hola desde la lambda $nombre"
     }
+}
+
+/***
+ * El uso de Let nos permite que, junto con las safe-calls, ejecutar un codigo solo cuando una variable nullable
+ * no es nula, para asi evitar un NullPointerException
+ */
+fun usoDeLet() {
+    println()
+    println()
+    println()
+    println("###### Seccion de uso de high order functions en Kotlin ######")
+
+    var nombre : String? = null
+    nombre?.let {
+        valor -> println("El nombre no es nulo, es $valor")
+    }
+
+    nombre = "Giuseppe"
+    nombre?.let {
+            valor -> println("El nombre no es nulo, es $valor")
+    }
+}
+
+/***
+ * El with nos permite acceder directamente a las propiedades de una variable que le pasamos como parametro, para evitar
+ * llamar a la variable en repetidas ocasiones o usar directamente sus propiedades
+ */
+fun usoDeWith() {
+    println()
+    println()
+    println()
+    println("###### Seccion de uso de With ######")
+    val colores = listOf("Azul", "Amarillo", "Rojo")
+    with(colores) {
+        println("Nuestros colores son $this")
+        println("La cantidad de colores que hay en esta lista es de $size")
+    }
+}
+
+/***
+ * Run nos permite ejecutar una serie de operaciones luego de declarar una variable
+ */
+fun usoDeRun() {
+    println()
+    println()
+    println()
+    println("###### Seccion de uso de Run ######")
+    val moviles = mutableListOf("Samsung S22", "Iphone 13", "Google Pixel 2XL", "Google Pixel 4a")
+        .run {
+            removeIf { movil -> movil.contains("Google") }
+            this
+        }
+    println(moviles)
+}
+
+/***
+ * Apply nos permite realizar operaciones sobre una variable y luego devolver el valor, al contrario que run
+ */
+fun usoDeApply() {
+    println()
+    println()
+    println()
+    println("###### Seccion de uso de Apply ######")
+    val moviles = mutableListOf("Samsung S22", "Iphone 13", "Google Pixel 2XL", "Google Pixel 4a")
+        .apply {
+            removeIf { movil -> movil.contains("Google") }
+        }
+    println(moviles)
+
+    var colores: MutableList<String>? = null
+
+    // Al ser nulo, no se va a imprimir nada ni generara un error de NullPointerException
+    colores?.apply {
+        println("Nuestros colores son $this")
+        println("La cantidad de colores es $size") // Actua como si fuera el with
+    }
+
+    colores = mutableListOf("Amarillo", "Verde", "Rojo", "Azul")
+
+    // Al ser nulo, no se va a imprimir nada ni generara un error de NullPointerException
+    colores?.apply {
+        println("Nuestros colores son $this")
+        println("La cantidad de colores es $size") // Actua como si fuera el with
+    }
+}
+
+/***
+ * Also nos permite obtener una variable, luego ejecutar un codigo con esa variable y luego devolverla como
+ * parametro para que pueda volver a ser utilizada por una funcion mas adelante
+ */
+fun usoDeAlso() {
+    println()
+    println()
+    println()
+    println("###### Seccion de uso de Also ######")
+    val moviles = mutableListOf("Samsung S22", "Iphone 13", "Google Pixel 2XL", "Google Pixel 4a")
+        .also {
+            lista -> println("El valor original de la lista es: $lista")
+        }.asReversed()
+    println(moviles)
 }
